@@ -3,11 +3,9 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 dotenv.config();
 const { createProduct, getAllProducts, updateProduct, deleteProduct } = require('./schema/product');
-
+const Category = require('./schema/product');
 const app = express();
 const PORT = 3000;
-
-
 app.use(express.json());
 
 mongoose.connect(process.env.MONGODB_URI || { useNewUrlParser: true, useUnifiedTopology: true })
@@ -37,6 +35,7 @@ app.get('/products', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 
 app.put('/products/:id', async (req, res) => {
   try {
