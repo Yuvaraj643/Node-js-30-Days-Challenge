@@ -18,6 +18,18 @@ const productSchema = new mongoose.Schema({
 
 const Product = mongoose.model('Product', productSchema);
 
+function createProductNameIndex() {
+  Product.collection.createIndex({ name: 1 }, (err, result) => {
+    if (err) {
+      console.error('Error creating index:', err);
+    } else {
+      console.log('Index created successfully:', result);
+    }
+  });
+}
+
+createProductNameIndex();
+
 app.post('/products', (req, res) => {
   const { name, description, price } = req.body;
   const product = new Product({ name, description, price });
