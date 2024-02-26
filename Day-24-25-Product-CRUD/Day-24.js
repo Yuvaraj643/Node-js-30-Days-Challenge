@@ -28,7 +28,35 @@ function createProductNameIndex() {
   });
 }
 
-createProductNameIndex();
+// createProductNameIndex();
+
+async function getProductStatistics() {
+  try {
+    const aggregatedStats = await Product.aggregate([
+      {
+        $group: {
+          _id: null,
+          totalProducts: { $sum: 1 },
+          averagePrice: { $avg: "$price" }
+        }
+      },
+      {
+        $project: {
+          _id: 0,
+          totalProducts: 1,
+          averagePrice: 1
+        }
+      }
+    ]);
+    
+    return aggregatedStats[0];
+  } catch (error) {
+    console.error('Error fetching product statistics:', error);
+    return null;
+  }
+}
+
+getProductStatistics();
 
 app.post('/products', (req, res) => {
   const { name, description, price } = req.body;
